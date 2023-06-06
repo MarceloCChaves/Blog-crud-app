@@ -3,7 +3,7 @@ import api from "../../actions/api";
 import Post from "../../components/Post/Post";
 import { IPost } from "../../interfaces/IPost";
 import "./Posts.css";
-import { FiLogOut } from 'react-icons/fi'
+import { FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 const Posts = () => {
@@ -12,18 +12,31 @@ const Posts = () => {
   const [contentInput, setContentInput] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   let Username = JSON.parse(localStorage.getItem("username") || "{}");
+  const [nextPage, setNextPage] = useState("");
+  const [previousPage, setPreviousPage] = useState("");
 
-  useEffect(() => {
+  const loadData = (url: any) => {
     api
-      .get("/careers/")
+      .get(url)
       .then((res) => {
         setPosts(res.data.results);
         setIsLoading(false);
+        setNextPage(res.data.next);
+        setPreviousPage(res.data.previous);
+        window.scrollTo(0, 0);
       })
       .catch((err) => {
         console.log(err.message);
       });
+  };
+
+  useEffect(() => {
+    loadData("/careers/");
   }, []);
+
+  const doReload = () => {
+    window.location.reload();
+  }
 
   const submitPost = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,7 +48,7 @@ const Posts = () => {
       })
       .then(() => {
         alert("Success");
-        window.location.reload();
+        doReload();
       })
       .catch((err) => {
         console.log(err.message);
@@ -43,12 +56,13 @@ const Posts = () => {
   };
 
   const deletePost = async (deletedPost: IPost) => {
+
     try {
       await api.delete(`/careers/${deletedPost.id}/`);
       posts.filter((post) => post.id !== deletedPost.id);
       setPosts([...posts]);
       alert("Success");
-      window.location.reload();
+      doReload();
     } catch (error) {
       console.error(error);
     }
@@ -58,23 +72,23 @@ const Posts = () => {
     try {
       const response = await api.put(`/careers/${editedPost.id}/`, {
         title: titleInput,
-        content: contentInput
+        content: contentInput,
       });
       setPosts(response.data);
       alert("Success");
-      window.location.reload();
+      doReload();
     } catch (error) {
       console.error(error);
     }
-  }
+  };
 
   return (
     <div className="posts-container">
       <div className="posts-content">
         <nav className="posts-navbar">
           <h3>CodeLeap Network</h3>
-          <Link to="/"  title="Logout">
-            <FiLogOut size={20} color={'#fff'}/>
+          <Link to="/" title="Logout">
+            <FiLogOut size={20} color={"#fff"} />
           </Link>
         </nav>
         <form className="posts-form" onSubmit={submitPost}>
@@ -126,6 +140,17 @@ const Posts = () => {
               );
             })
           )}
+          <div className="pagination-buttons">
+            <button
+              onClick={() => loadData(previousPage)}
+              disabled={!previousPage}
+            >
+              Previous page
+            </button>
+            <button onClick={() => loadData(nextPage)} disabled={!nextPage}>
+              Next page
+            </button>
+          </div>
         </form>
       </div>
     </div>

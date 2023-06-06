@@ -69,7 +69,7 @@
   justify-content: right;
 }
 
-.posts-button button{
+.posts-button button, .pagination-buttons button{
   background: var(--blue);
   color: var(--white);
   font-weight: 700;
@@ -82,16 +82,21 @@
   transition: 0.5s linear;
 }
 
-.posts-button button:disabled{
+.posts-button button:disabled, .pagination-buttons button:disabled{
   filter: brightness(90%);
   cursor: not-allowed;
 }
 
-.posts-button button:hover{
+.posts-button button:hover, .pagination-buttons button:hover{
   filter: brightness(110%);
 }
 
 .posts-loading {
   text-align: center;
   margin-top: 10px;
+}
+
+.pagination-buttons {
+  display: flex;
+  justify-content: space-between;
 }
