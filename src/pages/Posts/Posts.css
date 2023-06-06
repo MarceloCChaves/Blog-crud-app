@@ -1,0 +1,97 @@
+.posts-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.posts-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 960px;
+  max-width: 100%;
+}
+
+.posts-navbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--blue);
+  height: 80px;
+  padding: 0 37px;
+}
+
+.posts-navbar h3 {
+  color: var(--white);
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.posts-form {
+  width: 100%;
+  background: var(--white);
+  padding: 20px;
+}
+
+.posts-inputs {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid var(--gray);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.posts-inputs h3 {
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.posts-inputs p {
+  margin: 15px 0 0;
+}
+
+.posts-inputs input, .posts-inputs textarea {
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid var(--gray);
+  margin: 10px 0;
+}
+
+.posts-inputs textarea {
+  resize: none;
+}
+
+.posts-button {
+  display: flex;
+  justify-content: right;
+}
+
+.posts-button button{
+  background: var(--blue);
+  color: var(--white);
+  font-weight: 700;
+  text-transform: uppercase;
+  border: none;
+  padding: 8px 25px;
+  cursor: pointer;
+  border-radius: 8px;
+  margin-top: 20px;
+  transition: 0.5s linear;
+}
+
+.posts-button button:disabled{
+  filter: brightness(90%);
+  cursor: not-allowed;
+}
+
+.posts-button button:hover{
+  filter: brightness(110%);
+}
+
+.posts-loading {
+  text-align: center;
+  margin-top: 10px;
+}
