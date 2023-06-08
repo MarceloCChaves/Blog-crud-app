@@ -5,6 +5,7 @@ import { IPost } from "../../interfaces/IPost";
 import "./Posts.css";
 import { FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const Posts = () => {
   const [posts, setPosts] = useState<IPost[]>([]);
@@ -35,19 +36,21 @@ const Posts = () => {
   }, []);
 
   const doReload = () => {
-    window.location.reload();
-  }
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000)
+  };
 
-  const submitPost = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitPost = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    api
+    await api
       .post("/careers/", {
         username: Username,
         title: titleInput,
         content: contentInput,
       })
       .then(() => {
-        alert("Success");
+        toast.success("Post created successfully");
         doReload();
       })
       .catch((err) => {
@@ -56,30 +59,31 @@ const Posts = () => {
   };
 
   const deletePost = async (deletedPost: IPost) => {
-
-    try {
-      await api.delete(`/careers/${deletedPost.id}/`);
+    await api.delete(`/careers/${deletedPost.id}/`)
+    .then(() => {
       posts.filter((post) => post.id !== deletedPost.id);
       setPosts([...posts]);
-      alert("Success");
+      toast.success(`Post ${deletedPost.id} was deleted successfully`);
       doReload();
-    } catch (error) {
-      console.error(error);
-    }
+    })
+    .catch((err) => {
+      console.log(err.message);
+    })
   };
 
   const editPost = async (editedPost: IPost) => {
-    try {
-      const response = await api.put(`/careers/${editedPost.id}/`, {
-        title: titleInput,
-        content: contentInput,
-      });
-      setPosts(response.data);
-      alert("Success");
+    await api.put(`/careers/${editedPost.id}/`, {
+      title: titleInput,
+      content: contentInput,
+    })
+    .then((res) => {
+      setPosts(res.data);
+      toast.success(`Post ${editedPost.id} was edited successfully`);
       doReload();
-    } catch (error) {
-      console.error(error);
-    }
+    })
+    .catch((err) => {
+      console.log(err.message);
+    })
   };
 
   return (
@@ -153,6 +157,7 @@ const Posts = () => {
           </div>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };
